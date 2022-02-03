@@ -2,7 +2,14 @@
 
 @section('content')
 <div class="container">
-  <h1>lista posts</h1>
+  <h1>Lista Posts</h1>
+
+   @if (session('deleted'))
+      <div class="alert alert-danger" role="alert">
+          {{ session('deleted') }}
+      </div>
+  @endif
+     
 
   <table class="table">
     <thead>
@@ -21,9 +28,15 @@
         <td>{{ $post->title }}</td>
         <td>{{ $post->content }}</td>
         <td> <a href=" {{ route('admin.posts.show', $post) }} "> <button class="btn btn-info"> SHOW</button> </a> </td>
-        <td> <a href=""> <button class="btn btn-secondary">EDIT</button> </a> </td>
-   
-        <td> <button class="btn btn-danger"> DELETE</button> </td>
+        <td> <a href=" {{ route('admin.posts.edit', $post) }} "> <button class="btn btn-secondary">EDIT</button> </a> </td>
+        <td>
+            <form onsubmit="return confirm('Confermi eliminazione del post {{ $post->title }} ? ')" 
+              action= "{{ route('admin.posts.destroy', $post) }}" method="POST">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-danger"> DELETE</button> 
+          </form>
+        </td>
       
       </tr>
       
