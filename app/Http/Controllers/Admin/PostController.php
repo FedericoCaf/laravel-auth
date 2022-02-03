@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('id', 'desc')->paginate(6);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -26,7 +26,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.posts.create');
     }
 
     /**
@@ -37,7 +37,13 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $new_post = new Post();
+
+        $new_post->fill($data);
+        $new_post->slug = Post::generateSlug($new_post->title);
+        $new_post->save();
+        return redirect()->route('admin.posts.show', $new_post);
     }
 
     /**
@@ -48,7 +54,11 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Post::find($id);
+        if($post){
+         return view('admin.posts.show', compact('post'));
+        }
+        abort(404, 'Post non presente nel database');
     }
 
     /**
@@ -59,7 +69,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.posts.edit');
     }
 
     /**
