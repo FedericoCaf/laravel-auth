@@ -37,6 +37,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate( $this->validationData());
         $data = $request->all();
         $new_post = new Post();
 
@@ -85,6 +86,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        $request->validate( $this->validationData());
         $data = $request->all();
         $data['slug'] = Post::generateSlug($data['title']);
 
@@ -103,5 +105,12 @@ class PostController extends Controller
     {
         $post->delete();
         return redirect()->route('admin.posts.index')->with('deleted', "il post $post->title è stato eliminato");
+    }
+
+    private function validationData(){
+        return [
+            'title' => "required",
+            'content' => 'required'
+        ];
     }
 }

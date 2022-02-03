@@ -5,15 +5,20 @@
 
   <div class="row">
     <div class="col-10 offset-1">
+      @if ($errors->any())
+        <div class="alert alert-danger" role="alert">
+            <p> Compilare i campi obbligatori </p>
+        </div>
+      @endif
       <form action=" {{ route('admin.posts.store') }} " method="POST">
         @csrf
         <div class="mb-3">
           <label for="title" class="form-label">Titolo</label>
-          <input type="text" class="form-control" name="title" id="title">
+          <input type="text" class="form-control @error('title') is-invalid @enderror" value=" {{ old('title') }} "  name="title" id="title">
         </div>
         <div class="mb-3">
           <label for="content" class="form-label">Content</label>
-          <textarea type="text" class="form-control" name="content" id="content"> </textarea>
+          <textarea type="text" class="form-control @error('content') is-invalid @enderror" value=" {{ old('content') }} " name="content" id="content"> </textarea>
         </div>
     
         <button type="submit" class="btn btn-primary m-2">Salva</button>
